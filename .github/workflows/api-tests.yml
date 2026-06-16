@@ -20,15 +20,24 @@ jobs:
         node-version: '18'
 
     - name: Install Newman
-      run: npm install -g newman newman-reporter-htmlextra
+      run: npm install -g newman
 
+    # 🔍 DEBUG: Show what files exist
+    - name: Debug folder structure
+      run: |
+        echo "=== Root Directory ==="
+        ls -la
+        echo ""
+        echo "=== Collections Folder ==="
+        ls -la collections/ || echo "❌ collections folder not found!"
+        echo ""
+        echo "=== Environments Folder ==="
+        ls -la environments/ || echo "❌ environments folder not found!"
+        echo ""
+        echo "=== Data Folder ==="
+        ls -la data/ || echo "❌ data folder not found!"
+
+    # ✅ RUN TESTS WITHOUT HTML REPORTER (to see real error)
     - name: Run API Tests
       run: |
-         newman run "collections/API Testing Project - Posts Service.postman_collection.json" -e "environments/QA API Environment.postman_environment.json" -r htmlextra
-
-    - name: Upload Test Report
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-report
-        path: newman/
+        newman run "collections/API Testing Project - Posts Service.postman_collection.json" -e "environments/QA API Environment.postman_environment.json"
