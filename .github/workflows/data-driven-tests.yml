@@ -1,0 +1,32 @@
+name: 📊 Data-Driven Tests
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs at 6 AM daily
+  workflow_dispatch:      # Manual trigger
+
+jobs:
+  data-driven:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Newman
+      run: npm install -g newman newman-reporter-htmlextra
+
+    - name: Run Data-Driven Tests
+      run: |
+        newman run "collections/Data-Driven Tests.postman_collection.json" -e "environments/QA API Environment.postman_environment.json" -d data/test-data.csv -r htmlextra
+
+    - name: Upload Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: data-driven-report
+        path: newman/

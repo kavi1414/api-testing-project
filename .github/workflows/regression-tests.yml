@@ -1,13 +1,12 @@
-name: API Tests
+name: 🔥 Regression Tests
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  schedule:
+    - cron: '0 2 * * *'  # Runs at 2 AM daily
+  workflow_dispatch:      # Manual trigger
 
 jobs:
-  test:
+  regression:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,13 +21,12 @@ jobs:
     - name: Install Newman
       run: npm install -g newman newman-reporter-htmlextra
 
-    - name: Run API Tests
+    - name: Run Regression Tests
       run: |
-        newman run "collections/API Testing Project - Posts Service.postman_collection.json" -e "environments/QA API Environment.postman_environment.json" -r htmlextra
+        newman run "collections/Regression Tests.postman_collection.json" -e "environments/QA API Environment.postman_environment.json" -r htmlextra
 
-    - name: Upload Test Report
-      if: always()
+    - name: Upload Report
       uses: actions/upload-artifact@v4
       with:
-        name: test-report
+        name: regression-report
         path: newman/
