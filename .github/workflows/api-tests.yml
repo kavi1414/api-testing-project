@@ -40,4 +40,4 @@ jobs:
     # ✅ RUN TESTS WITHOUT HTML REPORTER (to see real error)
     - name: Run API Tests
       run: |
-        newman run "collections/API Testing Project - Posts Service.postman_collection.json" -e "environments/QA API Environment.postman_environment.json"
+        newman run "collections/API Testing Project - Posts Service.postman_collection.json" -e "environments/QA API Environment.postman_environment.json" -d data/test-data.csv
